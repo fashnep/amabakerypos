@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ChefHat, UtensilsCrossed, LayoutDashboard } from "lucide-react";
+import { ChefHat, UtensilsCrossed, Monitor, ShieldCheck } from "lucide-react";
 
 export default function RoleSelection() {
   const navigate = useNavigate();
@@ -7,78 +7,86 @@ export default function RoleSelection() {
   const roles = [
     {
       id: 'waiter',
-      title: 'Waiter Interface',
-      description: 'Table management & ordering',
+      title: 'Waiter',
+      description: 'Mobile Table Service',
       icon: UtensilsCrossed,
       path: '/waiter',
       color: 'bg-amber-100 text-amber-700',
     },
     {
+      id: 'counter',
+      title: 'Counter POS',
+      description: 'Takeaway & Billing',
+      icon: Monitor,
+      path: '/counter',
+      color: 'bg-blue-100 text-blue-700',
+    },
+    {
       id: 'kitchen',
-      title: 'Kitchen Display',
-      description: 'Order preparation view',
+      title: 'Kitchen',
+      description: 'Order Display System',
       icon: ChefHat,
-      path: '/login/kitchen',
+      path: '/kitchen',
       color: 'bg-orange-100 text-orange-700',
     },
     {
       id: 'admin',
-      title: 'Administration',
-      description: 'System control panel',
-      icon: LayoutDashboard,
-      path: '/login/admin',
+      title: 'Admin',
+      description: 'Dashboard & Reports',
+      icon: ShieldCheck,
+      path: '/admin',
       color: 'bg-stone-100 text-stone-700',
     },
   ];
 
   return (
-    <div className="min-h-screen bg-amber-50/30 flex flex-col items-center justify-center p-4 md:p-6 relative overflow-y-auto">
+    <div className="min-h-screen gradient-cream flex flex-col items-center justify-center p-4 md:p-8 relative overflow-y-auto">
       {/* Decorative background elements */}
-      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-amber-50 to-transparent opacity-50 -z-10" />
+      <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-white/60 to-transparent opacity-50 -z-10" />
 
-      <div className="w-full max-w-4xl flex flex-col items-center z-10 py-8 md:py-0">
+      <div className="w-full max-w-7xl flex flex-col items-center z-10 py-12 md:py-0">
 
         {/* Brand Section */}
-        <div className="text-center mb-8 md:mb-12 animate-in fade-in zoom-in duration-700">
-          <div className="relative inline-block group cursor-pointer">
-            <div className="absolute inset-0 bg-amber-200 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full" />
+        <div className="text-center mb-12 md:mb-16 animate-in fade-in zoom-in duration-700">
+          <div className="relative inline-block group cursor-pointer mb-8">
+            <div className="absolute inset-0 bg-primary/20 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full" />
             <img
-              src="/logos/logo2brown.jpeg"
+              src="/logos/logo1white.jfif"
               alt="Ama Bakery Logo"
-              className="relative h-24 w-24 md:h-28 md:w-28 rounded-[2rem] mb-6 object-cover border-4 border-white transform transition-transform duration-500 group-hover:scale-105"
+              className="relative h-28 w-28 md:h-32 md:w-32 rounded-[2.5rem] mb-6 object-cover border-4 border-white shadow-2xl transform transition-all duration-500 group-hover:scale-105 group-hover:rotate-2"
             />
           </div>
-          <h1 className="text-3xl md:text-5xl font-bold text-stone-800 tracking-tight mb-3">
+          <h1 className="text-4xl md:text-6xl font-black text-slate-800 tracking-tight mb-4">
             Ama Bakery
           </h1>
-          <p className="text-base md:text-lg text-stone-500 font-medium tracking-wide">
-            Select your workspace
+          <p className="text-base md:text-xl text-primary/60 font-black uppercase tracking-[0.3em] bg-primary/5 px-6 py-2 rounded-full inline-block">
+            Management Suite
           </p>
         </div>
 
-        {/* Roles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full animate-in slide-in-from-bottom-8 duration-700 delay-150">
+        {/* Roles Grid - 4 in 1 row on desktop */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full animate-in slide-in-from-bottom-8 duration-700 delay-150">
           {roles.map((role) => (
             <button
               key={role.id}
               onClick={() => navigate(role.path)}
-              className="group relative flex flex-col items-center p-6 md:p-8 bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-sm hover:shadow-xl hover:shadow-amber-900/5 border-4 border-stone-100/80 hover:border-amber-200/50 transition-all duration-300 hover:-translate-y-1 active:scale-95"
+              className="group relative flex flex-col items-center p-8 md:p-10 bg-white rounded-[3rem] shadow-sm hover:shadow-2xl hover:shadow-primary/10 border-4 border-white hover:border-primary/20 transition-all duration-300 hover:-translate-y-2 active:scale-95"
             >
-              <div className={`h-16 w-16 md:h-20 md:w-20 rounded-full ${role.color} flex items-center justify-center mb-4 md:mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
-                <role.icon className="h-8 w-8 md:h-9 md:w-9" strokeWidth={1.5} />
+              <div className={`h-20 w-20 md:h-24 md:w-24 rounded-[2rem] ${role.color} flex items-center justify-center mb-6 md:mb-8 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-lg group-hover:shadow-current/20`}>
+                <role.icon className="h-10 w-10 md:h-12 md:w-12" strokeWidth={1.5} />
               </div>
 
-              <h3 className="text-lg md:text-xl font-bold text-stone-800 mb-2 group-hover:text-amber-900 transition-colors">
+              <h3 className="text-xl md:text-2xl font-black text-slate-800 mb-3 group-hover:text-primary transition-colors">
                 {role.title}
               </h3>
 
-              <p className="text-stone-400 text-sm font-medium text-center leading-relaxed">
+              <p className="text-slate-400 text-xs md:text-sm font-bold uppercase tracking-widest text-center leading-relaxed">
                 {role.description}
               </p>
 
               {/* Hover Indicator */}
-              <div className="absolute bottom-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-amber-600 hidden md:block">
-                <span className="text-2xl">→</span>
+              <div className="mt-8 h-1 w-12 bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full w-0 group-hover:w-full bg-primary transition-all duration-500" />
               </div>
             </button>
           ))}
@@ -87,8 +95,10 @@ export default function RoleSelection() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-12 md:absolute md:bottom-6 text-center w-full text-stone-300 text-[10px] md:text-xs tracking-widest font-medium uppercase">
-        Designed for Ama Bakery
+      <footer className="mt-20 text-center w-full">
+        <p className="text-slate-300 text-[10px] md:text-xs tracking-[0.4em] font-black uppercase">
+          Secure Terminal • v2.0
+        </p>
       </footer>
     </div>
   );

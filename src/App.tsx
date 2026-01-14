@@ -17,6 +17,11 @@ import Checkout from "./pages/waiter/Checkout";
 import OrderStatus from "./pages/waiter/OrderStatus";
 import PaymentCollection from "./pages/waiter/PaymentCollection";
 
+// Counter Pages
+import CounterLogin from "./pages/counter/CounterLogin";
+import CounterPOS from "./pages/counter/CounterPOS";
+import CounterOrders from "./pages/counter/CounterOrders";
+
 // Kitchen Pages
 import KitchenDisplay from "./pages/kitchen/KitchenDisplay";
 
@@ -50,6 +55,11 @@ const App = () => (
           <Route path="/waiter/checkout" element={<Checkout />} />
           <Route path="/waiter/orders" element={<OrderStatus />} />
           <Route path="/waiter/payment" element={<PaymentCollection />} />
+
+          {/* Counter Routes */}
+          <Route path="/counter" element={<CounterLogin />} />
+          <Route path="/counter/pos" element={<CounterPOS />} />
+          <Route path="/counter/orders" element={<CounterOrders />} />
 
           {/* Kitchen Routes */}
           <Route path="/kitchen" element={<KitchenDisplay />} />

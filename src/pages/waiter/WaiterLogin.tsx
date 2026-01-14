@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Croissant, User, ArrowRight, Lock } from "lucide-react";
+import { User, ArrowRight, Lock, Keyboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { users } from "@/lib/mockData";
@@ -14,6 +14,22 @@ export default function WaiterLogin() {
   const [error, setError] = useState("");
   const [selectedUser, setSelectedUser] = useState<typeof users[0] | null>(null);
 
+  // Keyboard support for PIN step
+  useEffect(() => {
+    if (step === "pin") {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (/^[0-9]$/.test(e.key)) {
+          handlePinChange(e.key);
+        } else if (e.key === "Backspace") {
+          handleDelete();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [step, pin, selectedUser]);
+
   // Step 1: Username validation
   const handleUsernameSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +39,6 @@ export default function WaiterLogin() {
       return;
     }
 
-    // Find user by username (case-insensitive)
     const user = users.find(
       u => u.role === 'waiter' && u.name.toLowerCase() === username.toLowerCase()
     );
@@ -48,9 +63,7 @@ export default function WaiterLogin() {
       setError("");
 
       if (newPin.length === 4) {
-        // Check PIN against selected user
         if (selectedUser && selectedUser.pin === newPin) {
-          // Store waiter info and navigate
           localStorage.setItem('currentWaiter', JSON.stringify(selectedUser));
           toast.success("Login successful!", {
             description: `Welcome back, ${selectedUser.name}!`,
@@ -65,7 +78,7 @@ export default function WaiterLogin() {
   };
 
   const handleDelete = () => {
-    setPin(pin.slice(0, -1));
+    setPin(prev => prev.slice(0, -1));
     setError("");
   };
 
@@ -78,69 +91,67 @@ export default function WaiterLogin() {
   };
 
   return (
-    <div className="min-h-screen gradient-cream flex flex-col">
-      {/* Header */}
-      <header className="pt-24 pb-10 px-6 text-center">
-        <div className="inline-flex items-center justify-center h-20 w-20 rounded-2xl bg-white shadow-warm mb-4 p-1 overflow-hidden">
+    <div className="min-h-screen gradient-cream flex flex-col p-6">
+      {/* Header - Mobile Friendly */}
+      <header className="pt-12 pb-10 text-center">
+        <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-white shadow-warm mb-3 p-1 overflow-hidden">
           <img src="/logos/logo1white.jfif" alt="Ama Bakery Logo" className="h-full w-full object-cover" />
         </div>
-        <h1 className="text-3xl font-black tracking-tight text-foreground">Ama Bakery</h1>
-        <p className="text-muted-foreground text-sm font-medium">Waiter Login</p>
+        <h1 className="text-2xl font-black tracking-tight text-foreground">Ama Bakery</h1>
+        <p className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest mt-1">Waiter Login</p>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 px-6 flex flex-col items-center justify-center pb-8">
+      {/* Main Content - Centered for Mobile Context */}
+      <main className="flex-1 flex flex-col items-center justify-center max-w-sm mx-auto w-full pb-20">
         {step === "username" ? (
-          // Step 1: Username Entry
-          <div className="card-elevated p-6 w-full max-w-sm animate-slide-up">
-            <div className="flex items-center justify-center gap-2 mb-6">
+          // Step 1: Username Entry (Mobile Style)
+          <div className="card-elevated p-8 w-full animate-slide-up border-4 border-white">
+            <div className="flex items-center justify-center gap-2 mb-6 text-slate-700">
               <User className="h-5 w-5 text-primary" />
-              <span className="font-medium">Enter your username</span>
+              <span className="font-bold">Staff Username</span>
             </div>
 
             <form onSubmit={handleUsernameSubmit} className="space-y-4">
-              <div>
-                <Input
-                  type="text"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                    setError("");
-                  }}
-                  className="h-12 text-center text-lg"
-                  autoFocus
-                />
-              </div>
+              <Input
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setError("");
+                }}
+                className="h-14 text-center text-xl font-bold bg-slate-50 border-none"
+                autoFocus
+              />
 
               {error && (
-                <p className="text-destructive text-sm text-center">{error}</p>
+                <p className="text-destructive text-xs font-bold text-center">{error}</p>
               )}
 
               <Button
                 type="submit"
-                className="w-full btn-touch gradient-warm shadow-warm-lg"
+                className="w-full h-14 text-lg font-bold gradient-warm shadow-warm-lg transition-all active:scale-95"
               >
                 Continue
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
 
-              <p className="text-xs text-muted-foreground text-center">
-                Demo users: Rahul, Priya
+              <p className="text-[10px] text-slate-300 text-center font-black uppercase tracking-widest mt-4">
+                Rahul • Priya
               </p>
             </form>
           </div>
         ) : (
-          // Step 2: PIN Entry
-          <div className="card-elevated p-6 w-full max-w-sm animate-slide-up">
-            <div className="flex items-center justify-center gap-2 mb-2">
+          // Step 2: PIN Entry (Large Mobile Numbers)
+          <div className="card-elevated p-8 w-full animate-slide-up border-4 border-white">
+            <div className="flex items-center justify-center gap-2 mb-2 text-slate-700">
               <Lock className="h-5 w-5 text-primary" />
-              <span className="font-medium">Enter your PIN</span>
+              <span className="font-bold">Enter PIN</span>
             </div>
 
             {selectedUser && (
-              <p className="text-sm text-muted-foreground text-center mb-6">
-                Welcome, {selectedUser.name}
+              <p className="text-sm text-primary font-bold text-center mb-6 uppercase tracking-wider">
+                {selectedUser.name}
               </p>
             )}
 
@@ -149,25 +160,26 @@ export default function WaiterLogin() {
               {[0, 1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className={`h-4 w-4 rounded-full transition-all ${i < pin.length
-                    ? error ? 'bg-destructive' : 'bg-primary'
-                    : 'bg-muted'
+                  className={`h-4 w-4 rounded-full border-2 transition-all ${i < pin.length
+                    ? error ? 'bg-destructive border-destructive' : 'bg-primary border-primary'
+                    : 'bg-white border-slate-200'
                     }`}
                 />
               ))}
             </div>
 
             {error && (
-              <p className="text-destructive text-sm text-center mb-4">{error}</p>
+              <p className="text-destructive text-[10px] font-bold text-center mb-4">{error}</p>
             )}
 
-            {/* Number Pad */}
+            {/* Number Pad - Optimized for Thumb Reach */}
             <div className="grid grid-cols-3 gap-3 mb-4">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, null, 0, 'del'].map((item, index) => (
                 <Button
                   key={index}
                   variant={item === 'del' ? 'outline' : 'secondary'}
-                  className="h-14 text-xl font-semibold"
+                  className={`h-14 rounded-xl text-xl font-black ${item === 'del' ? 'bg-white' : 'bg-slate-50 hover:bg-slate-100 active:scale-90 transition-all'
+                    }`}
                   disabled={item === null}
                   onClick={() => {
                     if (item === 'del') {
@@ -184,24 +196,25 @@ export default function WaiterLogin() {
 
             <Button
               variant="ghost"
-              className="w-full"
+              className="w-full text-xs font-bold text-slate-400"
               onClick={handleBackToUsername}
             >
-              ← Change username
+              ← Change User
             </Button>
 
-            <p className="text-xs text-muted-foreground text-center mt-4">
-              Demo PINs: 1234 (Rahul), 2345 (Priya)
-            </p>
+            <div className="mt-6 pt-4 border-t border-slate-50 flex items-center justify-center gap-2 opacity-30">
+              <Keyboard className="h-3 w-3" />
+              <span className="text-[8px] font-black uppercase tracking-widest">Supports Physical Numpad</span>
+            </div>
           </div>
         )}
 
         <Button
           variant="ghost"
-          className="mt-4"
+          className="mt-8 font-black text-[10px] uppercase tracking-widest text-slate-300"
           onClick={() => navigate('/')}
         >
-          ← Back to role selection
+          ← Interface Selection
         </Button>
       </main>
     </div>

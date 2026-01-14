@@ -45,7 +45,7 @@ export interface Order {
 export interface User {
   id: string;
   name: string;
-  role: 'waiter' | 'kitchen' | 'supervisor' | 'admin';
+  role: 'waiter' | 'kitchen' | 'supervisor' | 'admin' | 'counter';
   pin: string;
 }
 
@@ -168,6 +168,7 @@ export const users: User[] = [
   { id: 'u2', name: 'Priya', role: 'waiter', pin: '2345' },
   { id: 'u3', name: 'Kitchen1', role: 'kitchen', pin: '3456' },
   { id: 'u4', name: 'Admin', role: 'admin', pin: '0000' },
+  { id: 'u5', name: 'Counter', role: 'counter', pin: '1111' },
 ];
 
 // Analytics Data
